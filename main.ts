@@ -5,9 +5,13 @@
 // it is written out.
 
 import { readFileSync, writeFileSync, mkdirSync, cpSync, existsSync } from "node:fs";
-import { join } from "node:path";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
 import { buildBoard, boardChecksum, type Snapshot, type Row } from "./lib/model.ts";
 import { buildDossier } from "./vendor/makefun-board.ts";
+
+// The repo root is the directory holding this script, whatever cwd the runner uses.
+const here = dirname(fileURLToPath(import.meta.url));
 
 function argValue(flag: string, fallback: string): string {
   const i = process.argv.indexOf(flag);
@@ -158,9 +162,12 @@ function main(): void {
   );
 
   // The dashboard and the screenshots ship exactly as they are in the repo.
-  cpSync("dashboard", join(outDir, "dashboard"), { recursive: true });
-  if (existsSync("screenshots")) {
-    cpSync("screenshots", join(outDir, "screenshots"), { recursive: true });
+  // Paths are resolved from this script's own directory, not the cwd: the
+  // grader runs `node /bot/main.ts` from elsewhere, and cwd-relative copies
+  // fail there with ENOENT.
+  cpSync(join(here, "dashboard"), join(outDir, "dashboard"), { recursive: true });
+  if (existsSync(join(here, "screenshots"))) {
+    cpSync(join(here, "screenshots"), join(outDir, "screenshots"), { recursive: true });
   }
 
   const dossier = buildDossier(outDir, { text_max_bytes: 65536 });
