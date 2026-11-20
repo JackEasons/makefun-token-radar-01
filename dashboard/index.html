@@ -1,14 +1,79 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Token Radar: pre-token protocols ranked by implied value</title>
+<title>Token Radar — pre-token launch values</title>
 <link rel="stylesheet" href="app.css">
 </head>
 <body>
-<a class="skip" href="#board">Skip to the board</a>
-<main id="board" tabindex="-1" aria-busy="true"></main>
+<noscript><p class="verify bad" style="margin:12px 0">This dashboard needs JavaScript: the board, the evidence and the verification strip are all rendered from data.js on load.</p></noscript>
+<header class="mast">
+  <div>
+    <h1>TOKEN RADAR <span class="tag">radar-3</span></h1>
+    <p class="sub">What a token would be worth if the protocol's record stayed as it is — and what to do to farm it first.</p>
+  </div>
+  <div class="mast-right">
+    <div id="asof">Snapshot 14 Nov 2026</div>
+    <div class="muted">DefiLlama protocols, TVL &ge; $5M</div>
+  </div>
+</header>
+
+<section class="kpis" id="kpis" aria-label="Key numbers"></section>
+
+<div class="verify" id="verify">Checking this table against board.json&hellip;</div>
+
+<section class="panel">
+  <h2>758 PROTOCOLS READ, EACH ACCOUNTED FOR</h2>
+  <div class="ledger-bar" id="ledgerBar"></div>
+  <div class="ledger-legend" id="ledgerLegend"></div>
+</section>
+
+<section class="panel">
+  <h2>OUT-OF-SAMPLE EVIDENCE — THE MODEL TESTED ON TOKENS IT NEVER SAW</h2>
+  <div class="evidence" id="evidence"></div>
+  <p class="formula" id="formula"></p>
+</section>
+
+<section class="controls">
+  <input id="search" type="search" placeholder="Search protocol or category&hellip;" aria-label="Search">
+  <select id="category" aria-label="Category"><option value="">All categories</option></select>
+  <select id="verdict" aria-label="Verdict">
+    <option value="">All verdicts</option>
+    <option>FARM</option>
+    <option>MARGINAL</option>
+    <option>SKIP</option>
+  </select>
+  <select id="sort" aria-label="Sort">
+    <option value="implied">Sort: implied value</option>
+    <option value="netHour">Sort: net / hour</option>
+    <option value="tvl">Sort: TVL</option>
+    <option value="name">Sort: name</option>
+  </select>
+  <span class="count" id="rowCount"></span>
+</section>
+
+<table class="board">
+  <thead>
+    <tr>
+      <th class="num">#</th><th>Protocol</th><th>Category</th>
+      <th class="num">TVL</th><th class="num">7D</th><th class="num">Age</th>
+      <th class="num">Implied</th><th class="num">Low–High</th>
+      <th class="num">Token odds</th><th>Verdict</th><th class="num">Net / hour</th>
+    </tr>
+  </thead>
+  <tbody id="rows"></tbody>
+</table>
+
+<dialog class="detail" id="detail"></dialog>
+
+<footer>
+  <p><strong>How a launch is priced.</strong> <span id="methodNote"></span></p>
+  <p><strong>Farm economics, stated plainly.</strong> Airdrop slice 5% of implied value; one farmer per $50,000 of TVL (500–100,000); fees $20 plus $4 per on-chain step; 90 minutes per step. Verdicts come from this board's own net-per-hour quartiles: FARM is the top quarter, MARGINAL the middle half, SKIP the bottom quarter or a net loss.</p>
+  <p><strong>What this is not.</strong> A protocol "records no token" in the snapshot — that is not proof it has none, and this board never predicts whether or when a token is issued. Implied value is this entry's own claim from the snapshot's record. Token odds are the sector's own tokenisation rate and did not beat the flat rate out of sample, so they are shown for context and never used for ranking.</p>
+  <p class="muted">Built from the sealed 14 Nov 2026 snapshot. No network. <span id="footNote"></span></p>
+</footer>
+
 <script src="../data.js"></script>
 <script src="app.js"></script>
 </body>
